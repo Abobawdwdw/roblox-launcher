@@ -1,0 +1,17 @@
+name: Build Launcher
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Compile
+        run: |
+          cl /O2 /EHsc /std:c++17 launcher.cpp comctl32.lib gdi32.lib user32.lib shlwapi.lib /Fe:launcher.exe /link /SUBSYSTEM:WINDOWS
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher
+          path: launcher.exe
